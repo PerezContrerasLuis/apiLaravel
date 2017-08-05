@@ -23,8 +23,9 @@ class UserController extends Controller
     public function index()
     {
         // return response()->json(User::all());
-        /*Respondemos con un transformer de una coleccion de usuarios*/
-        return $this->response->collection(User::all(), new UserTransformer());
+        /*Respondemos con un transformer de una coleccion de usuarios
+           paginamos los resultados mostrando 10 por pagina*/
+        return $this->response->paginator(User::paginate(10), new UserTransformer());
     }
 
     /**
