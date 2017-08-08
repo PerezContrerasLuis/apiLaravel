@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Uuid;
 use Illuminate\Http\Request;
-
 use App\Http\Requests;
 use Dingo\Api\Routing\Helpers;
 use App\User;
@@ -46,7 +46,11 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->except('password_confirmation');
+        $data['password'] = bcrypt($data['password']);
+        $data['uuid'] = Uuid::generate(4);
+        $user = User::create($data);
+        return $this->response->item($user, new UserTransformer());
     }
 
     /**
