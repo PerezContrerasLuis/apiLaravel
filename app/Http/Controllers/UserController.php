@@ -9,6 +9,7 @@ use Dingo\Api\Routing\Helpers;
 use App\User;
 use App\Http\Controllers\Controller;
 use App\TransFormers\UserTransformer;
+use App\Http\Requests\CreateUserRequest;
 
 class UserController extends Controller
 {
@@ -44,11 +45,11 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CreateUserRequest $request)
     {
         $data = $request->except('password_confirmation');
         $data['password'] = bcrypt($data['password']);
-        $data['uuid'] = Uuid::generate(4);
+        $data['uuid'] = Uuid::generate(4)->string;
         $user = User::create($data);
         return $this->response->item($user, new UserTransformer());
     }
